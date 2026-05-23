@@ -55,7 +55,7 @@ class Phase(FieldBase):
     def plot(self, ax, timestep):
         phase = self.field[timestep]
         assert phase.ndim == 2, "Phase must be a 2D tensor (H, W)"
-        im = ax.imshow((phase > 0).astype(float), vmin=0, vmax=1, cmap=self.cmap)
+        im = ax.imshow((phase > 0).astype(float), vmin=0, vmax=1, cmap=self.cmap, interpolation="nearest")
         return im
     
     def colorbar(self, ax):
@@ -78,7 +78,7 @@ class Temperature(FieldBase):
     def plot(self, ax, timestep: int):
         temp = self.field[timestep]
         assert temp.ndim == 2
-        im = ax.imshow(temp, cmap=self.cmap, norm=self.norm)
+        im = ax.imshow(temp, cmap=self.cmap, norm=self.norm, interpolation="nearest")
         return im
     
     def colorbar(self, cax, im):
@@ -101,7 +101,7 @@ class TemperatureTransparent(Temperature):
         temp = self.field[timestep]
         assert temp.ndim == 2
         temp_masked = np.where(temp <= 52, np.nan, temp)
-        im = ax.imshow(temp_masked, cmap=self.cmap, norm=self.norm)
+        im = ax.imshow(temp_masked, cmap=self.cmap, norm=self.norm, interpolation="nearest")
         return im
     
     def colorbar(self, cax, im):
@@ -119,7 +119,7 @@ class VelMag(FieldBase):
     def plot(self, ax, timestep: int):
         vel_mag = self.field[timestep]
         assert vel_mag.ndim == 2, "Vel mag must be a 2D tensor (H, W)"
-        im = ax.imshow(vel_mag, cmap=self.cmap, norm=self.norm)
+        im = ax.imshow(vel_mag, cmap=self.cmap, norm=self.norm, interpolation="nearest")
         return im
     
     def colorbar(self, cax, im):

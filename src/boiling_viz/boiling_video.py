@@ -63,18 +63,17 @@ class BoilingVideoBuilder:
         else:
             axes_iterable = axes.ravel()
         
-        for ax in axes_iterable:
-            ax.set_xticks([])
-            ax.set_yticks([])
-            for spine in ax.spines.values():
-                spine.set_visible(False)
-        
         def animate(timestep: int):
             ims = []
             for ax, field in zip(axes_iterable, self.fields):
                 ax.clear()
                 im = field.plot(ax, timestep)
                 ims.append(im)
+                for ax in axes_iterable:
+                    ax.set_xticks([])
+                    ax.set_yticks([])
+                    for spine in ax.spines.values():
+                        spine.set_visible(False)
                 if colorbars:
                     field.colorbar(ax, im)
                 if field_titles:
