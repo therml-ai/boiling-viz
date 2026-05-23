@@ -1,10 +1,7 @@
-import imageio
 import h5py
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter, ImageMagickWriter
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-from PIL import Image
 from typing import List, Union
 
 from boiling_viz.fields import FieldBase, array_to_fields

@@ -1,5 +1,5 @@
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
-import seaborn # imported to use colormaps
+import seaborn # noqa: F401
 
 def sdf_cmap():
     return "RdYlBu"

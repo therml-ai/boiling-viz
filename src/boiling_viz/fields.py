@@ -1,7 +1,6 @@
-from typing import Callable
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.colors import TwoSlopeNorm, Normalize, Colormap, LinearSegmentedColormap
+from matplotlib.colors import TwoSlopeNorm, Normalize
 from matplotlib.cm import ScalarMappable
 
 from boiling_viz.cmap import (
