@@ -1,0 +1,11 @@
+[project]
+name = "boiling-viz"
+version = "0.1.0"
+description = "Utilities for making pretty plots"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "h5py",
+]
