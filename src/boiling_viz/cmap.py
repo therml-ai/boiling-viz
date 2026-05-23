@@ -15,8 +15,16 @@ def temp_green_cmap():
                    '#9EFF09', '#D4FF0A', '#FEF30A', '#FEB709', '#FD7D08', '#FC4908',
                    '#FC1407', '#FB0007']
     colors = list(zip(temp_ranges, color_codes))
-    cmap = LinearSegmentedColormap.from_list('temperature_colormap', colors)
-    return cmap
+    return LinearSegmentedColormap.from_list('temp_green', colors)
+
+def temp_gray_black_cmap():
+    bulk_color = "#D3D1C7"
+    sat_color = "#888780"
+    hot1_color = "#000000"
+    hot2_color = "#000000"
+    temp_ranges = [0.0, 0.02, 0.3, 1.0]
+    colors = list(zip(temp_ranges, [bulk_color, sat_color, hot1_color, hot2_color]))
+    return LinearSegmentedColormap.from_list("temp_gray_black", colors)
 
 def vel_mag_cmap():
     return "rocket"

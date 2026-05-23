@@ -33,7 +33,7 @@ class FieldBase:
         raise NotImplementedError
     
 class SDF(FieldBase):
-    def __init__(self, field: np.array, cmap=sdf_cmap()):
+    def __init__(self, field: np.ndarray, cmap=sdf_cmap()):
         super().__init__("SDF", field, cmap)
         self.norm = FixedTwoSlopeNorm(vcenter=0, vmin=-6, vmax=0.00001)
                 
@@ -49,7 +49,7 @@ class SDF(FieldBase):
         return plt.colorbar(sm, cax=cax, fraction=0.05, pad=0.05)
 
 class Phase(FieldBase):
-    def __init__(self, field: np.array, cmap=phase_binary_cmap()):
+    def __init__(self, field: np.ndarray, cmap=phase_binary_cmap()):
         super().__init__("Phase", field, cmap)
 
     def plot(self, ax, timestep):
@@ -65,7 +65,7 @@ class Phase(FieldBase):
 class Temperature(FieldBase):
     def __init__(
         self,
-        field: np.array,
+        field: np.ndarray,
         cmap=temp_green_cmap(),
         min_temp: float = None,
         max_temp: float = None
@@ -75,7 +75,6 @@ class Temperature(FieldBase):
         self.max_temp = max_temp if max_temp else self.max()
         self.norm = Normalize(vmin=self.min_temp, vmax=self.max_temp, clip=True)
 
-    
     def plot(self, ax, timestep: int):
         temp = self.field[timestep]
         assert temp.ndim == 2
@@ -86,9 +85,32 @@ class Temperature(FieldBase):
         sm = ScalarMappable(norm=self.norm, cmap=self.cmap)
         im.set_clim(vmin=self.norm.vmin, vmax=self.norm.vmax)
         return plt.colorbar(sm, cax=cax, fraction=0.05, pad=0.05)
+    
+class TemperatureTransparent(Temperature):
+    def __init__(
+        self,
+        field: np.ndarray,
+        cmap=temp_green_cmap(),
+        min_temp: float = None,
+        max_temp: float = None
+    ):
+        cmap.set_bad(alpha=0.0)
+        super().__init__(field, cmap, min_temp, max_temp)
+    
+    def plot(self, ax, timestep: int):
+        temp = self.field[timestep]
+        assert temp.ndim == 2
+        temp_masked = np.where(temp <= 52, np.nan, temp)
+        im = ax.imshow(temp_masked, cmap=self.cmap, norm=self.norm)
+        return im
+    
+    def colorbar(self, cax, im):
+        sm = ScalarMappable(norm=self.norm, cmap=self.cmap)
+        im.set_clim(vmin=self.norm.vmin, vmax=self.norm.vmax)
+        return plt.colorbar(sm, cax=cax, fraction=0.05, pad=0.05)
 
 class VelMag(FieldBase):
-    def __init__(self, field: np.array, cmap=vel_mag_cmap()):
+    def __init__(self, field: np.ndarray, cmap=vel_mag_cmap()):
         super().__init__("Vel. Mag.", field, cmap)
         index = int(0.99 * self.field.size)
         self.vmax = np.sort(self.field.flatten())[index]
@@ -105,7 +127,7 @@ class VelMag(FieldBase):
         im.set_clim(vmin=self.norm.vmin, vmax=self.norm.vmax)
         return plt.colorbar(sm, cax=cax, fraction=0.05, pad=0.05)
 
-def array_to_fields(arr: np.array):
+def array_to_fields(arr: np.ndarray):
     assert arr.ndim == 4
     sdf = np.flip(arr[..., 0], 1)
     temp = np.flip(arr[..., 1], 1)
