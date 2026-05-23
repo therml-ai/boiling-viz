@@ -1,5 +1,5 @@
 [project]
-name = "boiling-viz"
+name = "boiling_viz"
 version = "0.1.0"
 description = "Utilities for making pretty plots"
 readme = "README.md"
@@ -8,4 +8,8 @@ dependencies = [
     "numpy",
     "matplotlib",
     "h5py",
+    "manim",
+    "imageio",
+    "pytest",
+    "seaborn"
 ]

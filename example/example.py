@@ -1,8 +1,3 @@
-# Boiling Viz
-
-A utility library to simplify making nice figures and animations.
-
-```python
 import numpy as np
 
 from boiling_viz.fields import array_to_fields
@@ -18,9 +13,3 @@ builder.make_video(
     step_counter=True, 
     field_titles=True
 )
-```
-
-![example/sample.gif rollout](example/sample.gif)
-
-You can pass in lists of different fields defined in `boiling_viz.fields`, and implement
-custom fields that derive from `FieldBase`.
