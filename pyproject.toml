@@ -1,7 +1,11 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
 [project]
 name = "boiling_viz"
 version = "0.1.0"
-description = "Utilities for making pretty plots"
+description = "Utilities for making images and videos"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
