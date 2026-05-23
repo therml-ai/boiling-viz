@@ -17,3 +17,6 @@ dependencies = [
     "pytest",
     "seaborn"
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/therml-ai/boiling-viz"
