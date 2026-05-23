@@ -1,16 +1,31 @@
+import imageio
+import h5py
 import numpy as np
-from typing import List, Union
 import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-from boiling_viz.fields import FieldBase
-import imageio
+from typing import List, Union
+
+from boiling_viz.fields import FieldBase, array_to_fields
 
 def fig_to_array(fig):
     fig.canvas.draw()
     return np.asarray(fig.canvas.buffer_rgba())[:, :, :3]
 
 class BoilingVideoBuilder:
-    def __init__(self, fields: Union[FieldBase, List[FieldBase]]):
+    def __init__(self, fields: Union[str, np.array, FieldBase, List[FieldBase]]):
+        
+        # NOTE: these if statements can all fall through:
+        #   - hdf5 -> numpy -> [FieldBase]
+        if isinstance(fields, str):
+            assert fields.endswith(".hdf5"), "fields path must be hdf5 file"
+            with h5py.File(fields, "r") as handle:
+                sdf = handle["dfun"][:]
+                temp = handle["temperature"][:]
+                velx = handle["velx"][:]
+                vely = handle["vely"][:]
+            fields = np.stack((sdf, temp, velx, vely), axis=-1)
+        if isinstance(fields, np.array):
+            fields = array_to_fields(fields)
         if isinstance(fields, FieldBase):
             fields = [fields]
         self.fields = fields
