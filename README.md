@@ -1,6 +1,6 @@
 # Boiling Viz
 
-A utility library to simplify making nice figures and animations.
+A utility library to simplify making nice figures and animations. Checkout `example/example.py`.
 
 ```python
 import numpy as np
@@ -20,7 +20,7 @@ builder.make_video(
 )
 ```
 
-![example/sample.gif rollout](example/sample.gif)
+![example trajectory video](example/sample.gif)
 
 You can pass in lists of different fields defined in `boiling_viz.fields`, and implement
 custom fields that derive from `FieldBase`.

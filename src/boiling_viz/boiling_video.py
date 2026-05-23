@@ -24,7 +24,7 @@ class BoilingVideoBuilder:
                 velx = handle["velx"][:]
                 vely = handle["vely"][:]
             fields = np.stack((sdf, temp, velx, vely), axis=-1)
-        if isinstance(fields, np.array):
+        if isinstance(fields, np.ndarray):
             fields = array_to_fields(fields)
         if isinstance(fields, FieldBase):
             fields = [fields]
