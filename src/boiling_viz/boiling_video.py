@@ -1,9 +1,9 @@
-from matplotlib.axes._axes import Axes
 import h5py
 from io import BytesIO
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation, PillowWriter, ImageMagickWriter
+import matplotlib.patheffects as pe
 from PIL import Image
 from typing import List, Union
 
@@ -15,19 +15,27 @@ def fig_to_array(fig):
     return np.asarray(fig.canvas.buffer_rgba())[:, :, :3]
 
 
+def apply_text_visibility(ax):
+    stroke = [pe.withStroke(linewidth=2, foreground="white")]
+    for text in [ax.title, ax.xaxis.label, ax.yaxis.label]:
+        text.set_color("black")
+        text.set_path_effects(stroke)
+
+
 class TransparentPillowWriter(PillowWriter):
     r"""
     This is basically a hack to get transparent background working.
     It is required that .save use disposal=2.
     """
+
     def grab_frame(self, **savefig_kwargs):
-        #_validate_grabframe_kwargs(savefig_kwargs)
+        # _validate_grabframe_kwargs(savefig_kwargs)
         self.fig.canvas.draw()
         buf = BytesIO()
-        self.fig.savefig(
-            buf, **{**savefig_kwargs, "format": "rgba", "dpi": self.dpi})
+        self.fig.savefig(buf, **{**savefig_kwargs, "format": "rgba", "dpi": self.dpi})
         im = Image.frombuffer(
-            "RGBA", self.frame_size, buf.getbuffer(), "raw", "RGBA", 0, 1)
+            "RGBA", self.frame_size, buf.getbuffer(), "raw", "RGBA", 0, 1
+        )
         if im.getextrema()[3][0] < 255:
             # This frame has transparency, so we'll just add it as is.
             self._frames.append(im)
@@ -38,8 +46,13 @@ class TransparentPillowWriter(PillowWriter):
 
     def finish(self):
         self._frames[0].save(
-            self.outfile, save_all=True, append_images=self._frames[1:],
-            duration=int(1000 / self.fps), loop=0, disposal=2)
+            self.outfile,
+            save_all=True,
+            append_images=self._frames[1:],
+            duration=int(1000 / self.fps),
+            loop=0,
+            disposal=2,
+        )
 
 
 FieldType = Union[str, np.ndarray, FieldBase, List[FieldBase]]
@@ -108,6 +121,7 @@ class BoilingVideoBuilder:
                     field.colorbar(ax, im)
                 if field_titles:
                     ax.set_title(field.name)
+                apply_text_visibility(ax)
             if step_counter:
                 axes_iterable[0].set_ylabel(f"Step {timestep + 1}")
             fig.canvas.draw()
